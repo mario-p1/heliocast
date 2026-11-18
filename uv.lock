@@ -3090,26 +3090,26 @@ wheels = [
 name = "solar-predictor"
 version = "0.1.0"
 source = { virtual = "." }
-default-groups = ["dev", "localonly"]
+default-groups = ["dev", "ml"]
 dependencies = [
     { name = "boto3" },
     { name = "botocore", extra = ["crt"] },
-    { name = "mlflow" },
     { name = "pandas" },
-    { name = "plotly" },
-    { name = "pytest" },
     { name = "requests" },
-    { name = "statsmodels" },
-    { name = "tqdm" },
 ]
 
 [package.dev-dependencies]
 dev = [
     { name = "notebook" },
+    { name = "pytest" },
     { name = "ruff" },
 ]
-localonly = [
+ml = [
+    { name = "mlflow" },
+    { name = "plotly" },
     { name = "scikit-learn" },
+    { name = "statsmodels" },
+    { name = "tqdm" },
     { name = "typer" },
     { name = "xgboost" },
 ]
@@ -3118,22 +3118,22 @@ localonly = [
 requires-dist = [
     { name = "boto3", specifier = ">=1.43.120" },
     { name = "botocore", extras = ["crt"], specifier = ">=1.43.120" },
-    { name = "mlflow", specifier = ">=3.17.2" },
     { name = "pandas", specifier = ">=3.1.0" },
-    { name = "plotly", specifier = ">=7.1.0" },
-    { name = "pytest", specifier = ">=9.2.0" },
     { name = "requests", specifier = ">=2.34.2" },
-    { name = "statsmodels", specifier = ">=0.15.0" },
-    { name = "tqdm", specifier = ">=4.70.1" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "notebook", specifier = ">=7.6.3" },
+    { name = "pytest", specifier = ">=9.2.0" },
     { name = "ruff", specifier = ">=0.17.3" },
 ]
-localonly = [
+ml = [
+    { name = "mlflow", specifier = ">=3.17.2" },
+    { name = "plotly", specifier = ">=7.1.0" },
     { name = "scikit-learn", specifier = ">=1.9.1" },
+    { name = "statsmodels", specifier = ">=0.15.0" },
+    { name = "tqdm", specifier = ">=4.70.1" },
     { name = "typer", specifier = ">=0.27.3" },
     { name = "xgboost", specifier = ">=3.4.1" },
 ]

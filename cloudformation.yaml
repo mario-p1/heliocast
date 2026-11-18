@@ -19,7 +19,7 @@ Resources:
     Properties:
       BucketName: !Sub ${AWS::StackName}-data-bucket-${AWS::AccountId}
 
-  FetchDataFunctionRole:
+  DataPipelineFunctionRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -54,11 +54,26 @@ Resources:
       Code:
         S3Bucket: !Ref CodeBucket
         S3Key: fetch_data_function.zip
-      Role: !GetAtt FetchDataFunctionRole.Arn
+      Role: !GetAtt DataPipelineFunctionRole.Arn
       Handler: solar_predictor.handlers.fetch_data.lambda_handler
       Runtime: python3.14
       Timeout: 60
       MemorySize: 512
+      Environment:
+        Variables:
+          DATA_BUCKET: !Ref DataBucket
+
+  BuildTreeFeaturesFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket: !Ref CodeBucket
+        S3Key: fetch_data_function.zip
+      Role: !GetAtt DataPipelineFunctionRole.Arn
+      Handler: solar_predictor.handlers.build_tree_features.lambda_handler
+      Runtime: python3.14
+      Timeout: 300
+      MemorySize: 2048
       Environment:
         Variables:
           DATA_BUCKET: !Ref DataBucket

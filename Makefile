@@ -52,6 +52,10 @@ deploy_lambda: upload_lambda
 		--function-name $(FETCH_DATA_FUNCTION_NAME) \
 		--s3-bucket $(CODE_BUCKET) \
 		--s3-key fetch_data_function.zip
+	aws lambda update-function-code \
+		--function-name $(BUILD_TREE_FEATURES_FUNCTION_NAME) \
+		--s3-bucket $(CODE_BUCKET) \
+		--s3-key fetch_data_function.zip
 
 .PHONY: deploy_cloudformation
 deploy_cloudformation:
