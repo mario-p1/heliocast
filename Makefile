@@ -72,3 +72,7 @@ push_image:
 	aws ecr get-login-password | docker login --username AWS --password-stdin $(ECR_REGISTRY)
 	docker build --platform linux/amd64 -t $(IMAGE_REPO_URI):latest .
 	docker push $(IMAGE_REPO_URI):latest
+
+.PHONY: download_data
+download_data:
+	aws s3 sync s3://$(DATA_BUCKET) data

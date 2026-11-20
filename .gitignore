@@ -14,3 +14,4 @@ wheels/
 chart.html
 mlflow.db
 mlruns/
+data/
