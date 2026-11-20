@@ -1,0 +1,5 @@
+*
+!pyproject.toml
+!uv.lock
+!solar_predictor
+**/__pycache__

@@ -1,10 +1,12 @@
 import pandas as pd
 
-from solar_predictor.storage import find_files_at_loc, read_csv
+from solar_predictor.storage import find_files_at_loc, read_s3_csv
 
 
 def read_sarah3(
-    location_prefix: str | None, csvs: list[str] | None = None
+    location_prefix: str | None,
+    csvs: list[str] | None = None,
+    read_fn=read_s3_csv,
 ) -> pd.DataFrame:
     """
     Arguments:
@@ -17,7 +19,7 @@ def read_sarah3(
     if csvs is None:
         csvs = find_files_at_loc(location_prefix, "/sarah3.csv")
 
-    dfs = [read_csv(csv) for csv in csvs]
+    dfs = [read_fn(csv) for csv in csvs]
     df = pd.concat(dfs, ignore_index=True)
 
     df["datetime"] = pd.to_datetime(df["timestamp"], unit="s", utc=True)

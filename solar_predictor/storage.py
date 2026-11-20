@@ -20,6 +20,10 @@ def get_year_sarah3_file_key(location_prefix: str, year: int):
     return f"{location_prefix}year={year}/sarah3.csv"
 
 
+def get_tree_features_file_key(latitude: str, longitude: str):
+    return f"features/lat={latitude},long={longitude}/tree_features.csv"
+
+
 def get_state_file_key(prefix: str):
     return f"{prefix}state.json"
 
@@ -50,7 +54,7 @@ def write_csv(file_key: str, df: pd.DataFrame, index: bool = True):
     )
 
 
-def read_csv(file_key: str):
+def read_s3_csv(file_key: str):
     obj = s3.get_object(Bucket=data_bucket, Key=file_key)
     return pd.read_csv(obj["Body"])
 

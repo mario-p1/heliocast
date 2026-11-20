@@ -52,10 +52,6 @@ deploy_lambda: upload_lambda
 		--function-name $(FETCH_DATA_FUNCTION_NAME) \
 		--s3-bucket $(CODE_BUCKET) \
 		--s3-key fetch_data_function.zip
-	aws lambda update-function-code \
-		--function-name $(BUILD_TREE_FEATURES_FUNCTION_NAME) \
-		--s3-bucket $(CODE_BUCKET) \
-		--s3-key fetch_data_function.zip
 
 .PHONY: deploy_cloudformation
 deploy_cloudformation:
@@ -64,10 +60,15 @@ deploy_cloudformation:
 		--stack-name $(STACK_NAME) \
 		--capabilities CAPABILITY_IAM \
 		--parameter-overrides \
-			CodeBucket=${CODE_BUCKET} \
-			VpcId=${VPC_ID} \
-			SubnetIds=${SUBNET_IDS}
-	aws cloudformation list-stack-resources \
+			CodeBucket=${CODE_BUCKET}
+	aws cloudformation describe-stacks \
 		--stack-name $(STACK_NAME) \
-		--query 'StackResourceSummaries[].[LogicalResourceId,PhysicalResourceId]' \
-		--output table
+		--query 'Stacks[0].Outputs[].[Description,OutputValue]' \
+		--output text | tr '\t' '='
+	
+
+.PHONY: push_image
+push_image:
+	aws ecr get-login-password | docker login --username AWS --password-stdin $(ECR_REGISTRY)
+	docker build --platform linux/amd64 -t $(IMAGE_REPO_URI):latest .
+	docker push $(IMAGE_REPO_URI):latest

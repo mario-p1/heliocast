@@ -19,6 +19,22 @@ Resources:
     Properties:
       BucketName: !Sub ${AWS::StackName}-data-bucket-${AWS::AccountId}
 
+  ReadWriteDataBucketPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:ListBucket
+            Resource: !GetAtt DataBucket.Arn
+          - Effect: Allow
+            Action:
+              - s3:GetObject
+              - s3:PutObject
+            Resource: !Sub ${DataBucket.Arn}/*
+
   DataPipelineFunctionRole:
     Type: AWS::IAM::Role
     Properties:
@@ -33,20 +49,7 @@ Resources:
               - sts:AssumeRole
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-      Policies:
-        - PolicyName: WriteDataBucket
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - s3:ListBucket
-                Resource: !GetAtt DataBucket.Arn
-              - Effect: Allow
-                Action:
-                  - s3:GetObject
-                  - s3:PutObject
-                Resource: !Sub ${DataBucket.Arn}/*
+        - !Ref ReadWriteDataBucketPolicy
 
   FetchDataFunction:
     Type: AWS::Lambda::Function
@@ -63,35 +66,27 @@ Resources:
         Variables:
           DATA_BUCKET: !Ref DataBucket
 
-  BuildTreeFeaturesFunction:
-    Type: AWS::Lambda::Function
+  ImageRepository:
+    Type: AWS::ECR::Repository
     Properties:
-      Code:
-        S3Bucket: !Ref CodeBucket
-        S3Key: fetch_data_function.zip
-      Role: !GetAtt DataPipelineFunctionRole.Arn
-      Handler: solar_predictor.handlers.build_tree_features.lambda_handler
-      Runtime: python3.14
-      Timeout: 300
-      MemorySize: 2048
-      Environment:
-        Variables:
-          DATA_BUCKET: !Ref DataBucket
+      RepositoryName: !Ref AWS::StackName
+      EmptyOnDelete: true
 
-  # SageMakerExecutionRole:
-  #   Type: AWS::IAM::Role
-  #   Properties:
-  #     AssumeRolePolicyDocument:
-  #       Version: '2012-10-17'
-  #       Statement:
-  #         - Effect: Allow
-  #           Principal:
-  #             Service:
-  #               - sagemaker.amazonaws.com
-  #           Action:
-  #             - sts:AssumeRole
-  #     ManagedPolicyArns:
-  #       - arn:aws:iam::aws:policy/AmazonSageMakerFullAccess
+  SageMakerExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - sagemaker.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSageMakerFullAccess
+        - !Ref ReadWriteDataBucketPolicy
 
   # SageMakerDomain:
   #   Type: AWS::SageMaker::Domain
@@ -113,3 +108,20 @@ Resources:
   #   Properties:
   #     DomainId: !Ref SageMakerDomain
   #     UserProfileName: cryptomlops-user
+
+Outputs:
+  DataBucketName:
+    Description: DATA_BUCKET
+    Value: !Ref DataBucket
+  FetchDataFunctionName:
+    Description: FETCH_DATA_FUNCTION_NAME
+    Value: !Ref FetchDataFunction
+  EcrRegistry:
+    Description: ECR_REGISTRY
+    Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com
+  ImageRepoUri:
+    Description: IMAGE_REPO_URI
+    Value: !GetAtt ImageRepository.RepositoryUri
+  SageMakerRoleArn:
+    Description: SAGEMAKER_ROLE_ARN
+    Value: !GetAtt SageMakerExecutionRole.Arn
