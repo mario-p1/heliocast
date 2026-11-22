@@ -11,9 +11,8 @@ def main(
     lat: str = typer.Option(..., help="Latitude"),
     long: str = typer.Option(..., help="Longitude"),
 ):
-    bucket = storage.data_bucket
-    location_prefix = storage.get_location_prefix(lat, long)
-    features_prefix = os.path.dirname(storage.get_tree_features_file_key(lat, long))
+    location_prefix = storage.get_raw_data_prefix(lat, long)
+    features_prefix = storage.get_features_prefix(lat, long)
     job_name = f"build-tree-features-{int(time.time())}"
 
     sagemaker = boto3.client("sagemaker")
@@ -24,7 +23,7 @@ def main(
             "ImageUri": f"{os.environ['IMAGE_REPO_URI']}:latest",
             "ContainerEntrypoint": ["python", "-m", "solar_predictor.preprocess"],
         },
-        Environment={"DATA_BUCKET": bucket},
+        Environment={"DATA_BUCKET": storage.data_bucket},
         ProcessingResources={
             "ClusterConfig": {
                 "InstanceCount": 1,
@@ -36,7 +35,7 @@ def main(
             {
                 "InputName": "raw",
                 "S3Input": {
-                    "S3Uri": f"s3://{bucket}/{location_prefix}",
+                    "S3Uri": f"s3://{storage.data_bucket}/{location_prefix}",
                     "LocalPath": "/opt/ml/processing/input",
                     "S3DataType": "S3Prefix",
                     "S3InputMode": "File",
@@ -48,7 +47,7 @@ def main(
                 {
                     "OutputName": "features",
                     "S3Output": {
-                        "S3Uri": f"s3://{bucket}/{features_prefix}",
+                        "S3Uri": f"s3://{storage.data_bucket}/{features_prefix}",
                         "LocalPath": "/opt/ml/processing/output",
                         "S3UploadMode": "EndOfJob",
                     },

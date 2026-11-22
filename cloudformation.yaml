@@ -88,26 +88,26 @@ Resources:
         - arn:aws:iam::aws:policy/AmazonSageMakerFullAccess
         - !Ref ReadWriteDataBucketPolicy
 
-  # SageMakerDomain:
-  #   Type: AWS::SageMaker::Domain
-  #   Properties:
-  #     DomainName: cryptomlops-domain
-  #     AuthMode: IAM
-  #     VpcId: !Ref VpcId
-  #     SubnetIds: !Ref SubnetIds
-  #     DefaultUserSettings:
-  #       ExecutionRole: !GetAtt SageMakerExecutionRole.Arn
-  #       JupyterLabAppSettings:
-  #         AppLifecycleManagement:
-  #           IdleSettings:
-  #             LifecycleManagement: ENABLED
-  #             IdleTimeoutInMinutes: 60
+  SageMakerDomain:
+    Type: AWS::SageMaker::Domain
+    Properties:
+      DomainName: !Sub ${AWS::StackName}-domain
+      AuthMode: IAM
+      VpcId: !Ref VpcId
+      SubnetIds: !Ref SubnetIds
+      DefaultUserSettings:
+        ExecutionRole: !GetAtt SageMakerExecutionRole.Arn
+        JupyterLabAppSettings:
+          AppLifecycleManagement:
+            IdleSettings:
+              LifecycleManagement: ENABLED
+              IdleTimeoutInMinutes: 60
 
-  # SageMakerUserProfile:
-  #   Type: AWS::SageMaker::UserProfile
-  #   Properties:
-  #     DomainId: !Ref SageMakerDomain
-  #     UserProfileName: cryptomlops-user
+  SageMakerUserProfile:
+    Type: AWS::SageMaker::UserProfile
+    Properties:
+      DomainId: !Ref SageMakerDomain
+      UserProfileName: !Sub ${AWS::StackName}-domain-user
 
 Outputs:
   DataBucketName:
@@ -125,3 +125,6 @@ Outputs:
   SageMakerRoleArn:
     Description: SAGEMAKER_ROLE_ARN
     Value: !GetAtt SageMakerExecutionRole.Arn
+  SageMakerDomainId:
+    Description: SAGEMAKER_DOMAIN_ID
+    Value: !Ref SageMakerDomain

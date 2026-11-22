@@ -12,20 +12,28 @@ def file_exists(bucket: str, key: str):
     return s3.list_objects_v2(Bucket=bucket, Prefix=key).get("KeyCount", 0) > 0
 
 
-def get_location_prefix(latitude: str, longitude: str):
+def get_raw_data_prefix(latitude: str, longitude: str):
     return f"raw/lat={latitude},long={longitude}/"
 
 
-def get_year_sarah3_file_key(location_prefix: str, year: int):
-    return f"{location_prefix}year={year}/sarah3.csv"
+def get_year_sarah3_file_key(raw_data_prefix: str, year: int):
+    return f"{raw_data_prefix}year={year}/sarah3.csv"
 
 
-def get_tree_features_file_key(latitude: str, longitude: str):
-    return f"features/lat={latitude},long={longitude}/tree_features.csv"
+def get_features_prefix(latitude: str, longitude: str):
+    return f"features/lat={latitude},long={longitude}/"
+
+
+def get_tree_features_file_key(features_prefix: str):
+    return f"{features_prefix}tree_features.csv"
 
 
 def get_state_file_key(prefix: str):
     return f"{prefix}state.json"
+
+
+def get_model_prefix(latitude: str, longitude: str):
+    return f"models/lat={latitude},long={longitude}/"
 
 
 def write_state(prefix: str, last_date: str):

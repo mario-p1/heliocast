@@ -53,6 +53,13 @@ deploy_lambda: upload_lambda
 		--s3-bucket $(CODE_BUCKET) \
 		--s3-key fetch_data_function.zip
 
+.PHONY: get_stack_info
+get_stack_info:
+	aws cloudformation describe-stacks \
+		--stack-name $(STACK_NAME) \
+		--query 'Stacks[0].Outputs[].[Description,OutputValue]' \
+		--output text | tr '\t' '='
+
 .PHONY: deploy_cloudformation
 deploy_cloudformation:
 	aws cloudformation deploy \
@@ -60,12 +67,9 @@ deploy_cloudformation:
 		--stack-name $(STACK_NAME) \
 		--capabilities CAPABILITY_IAM \
 		--parameter-overrides \
-			CodeBucket=${CODE_BUCKET}
-	aws cloudformation describe-stacks \
-		--stack-name $(STACK_NAME) \
-		--query 'Stacks[0].Outputs[].[Description,OutputValue]' \
-		--output text | tr '\t' '='
-	
+			CodeBucket=${CODE_BUCKET} \
+			VpcId=${VPC_ID} \
+			SubnetIds=${SUBNET_IDS}	
 
 .PHONY: push_image
 push_image:

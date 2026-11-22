@@ -21,7 +21,7 @@ def lambda_handler(event: dict, context: Any):
     lat = event["lat"]
     long = event["long"]
 
-    location_prefix = storage.get_location_prefix(lat, long)
+    location_prefix = storage.get_raw_data_prefix(lat, long)
 
     start_date = event.get("start_date") or resolve_start_date(location_prefix)
     end_date = event.get("end_date") or get_current_utc_date().strftime("%Y-%m-%d")

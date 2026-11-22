@@ -30,8 +30,6 @@ def main(
     )
 
     target = "target"
-    X_train, y_train = train_df.drop(columns=target), train_df[target]
-    X_valid, y_valid = valid_df.drop(columns=target), valid_df[target]
     X_test, y_test = test_df.drop(columns=target), test_df[target]
 
     test_metrics = calculate_metrics(y_test.to_numpy(), X_test["lag_49"])
