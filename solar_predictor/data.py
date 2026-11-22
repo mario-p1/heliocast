@@ -43,3 +43,20 @@ def interpolate_with_lag(series: pd.Series, lag: int) -> pd.Series:
         series = filled
 
     return filled
+
+
+def split_train_valid_test_by_index(
+    df: pd.DataFrame, train_size: float, valid_size: float
+):
+    df = df.sort_index()
+    test_size = 1.0 - train_size - valid_size
+
+    train_pos = int(df.shape[0] * train_size)
+    valid_pos = train_pos + int(df.shape[0] * valid_size)
+    test_pos = valid_pos + int(df.shape[0] * test_size)
+
+    return (
+        df.iloc[:train_pos],
+        df.iloc[train_pos:valid_pos],
+        df.iloc[valid_pos:test_pos],
+    )
