@@ -2,4 +2,5 @@
 !pyproject.toml
 !uv.lock
 !solar_predictor
+!serve.sh
 **/__pycache__
