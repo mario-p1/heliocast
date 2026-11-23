@@ -13,6 +13,7 @@ ENV UV_PROJECT_ENVIRONMENT=/opt/venv \
 WORKDIR /opt/program
 
 COPY pyproject.toml uv.lock ./
-RUN uv sync --frozen --no-default-groups --group ml --no-install-project
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-default-groups --group ml --no-install-project
 
 COPY solar_predictor solar_predictor
