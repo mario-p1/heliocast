@@ -115,6 +115,7 @@ Resources:
       Name: !Sub ${AWS::StackName}-mlflow
       ArtifactStoreUri: !Sub s3://${DataBucket}/mlflow
       RoleArn: !GetAtt SageMakerExecutionRole.Arn
+      ModelRegistrationMode: AutoModelRegistrationEnabled
       Tags:
         - Key: sagemaker:domain-arn
           Value: !GetAtt SageMakerDomain.DomainArn
