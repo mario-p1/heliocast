@@ -43,15 +43,16 @@ def main(
         ],
         OutputDataConfig={
             "S3OutputPath": f"s3://{storage.data_bucket}/{run_prefix}",
-            "CompressionType": "None",
+            "CompressionType": "NONE",
         },
         Environment={"DATA_BUCKET": storage.data_bucket},
         ResourceConfig={
             "InstanceCount": 1,
-            "InstanceType": "ml.g5.xlarge",
+            "InstanceType": "ml.t3.large",
             "VolumeSizeInGB": 5,
         },
-        StoppingCondition={"MaxRuntimeInSeconds": 1800},
+        # EnableManagedSpotTraining=True,
+        StoppingCondition={"MaxRuntimeInSeconds": 1800, "MaxWaitTimeInSeconds": 3600},
     )
     print(f"Started {job_name}")
 
