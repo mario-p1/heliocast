@@ -12,7 +12,7 @@ def main(
     long: str = typer.Option(..., help="Longitude"),
 ):
     features_prefix = storage.get_features_prefix(lat, long)
-    model_prefix = storage.get_model_prefix(lat, long)
+    run_prefix = storage.get_run_prefix(lat, long)
 
     job_name = f"train-xgboost-{int(time.time())}"
 
@@ -42,7 +42,8 @@ def main(
             }
         ],
         OutputDataConfig={
-            "S3OutputPath": f"s3://{storage.data_bucket}/{model_prefix}/",
+            "S3OutputPath": f"s3://{storage.data_bucket}/{run_prefix}",
+            "CompressionType": "None",
         },
         Environment={"DATA_BUCKET": storage.data_bucket},
         ResourceConfig={

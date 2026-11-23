@@ -79,4 +79,4 @@ push_image:
 
 .PHONY: download_data
 download_data:
-	aws s3 sync s3://$(DATA_BUCKET) data
+	aws s3 sync s3://$(DATA_BUCKET) data --exclude "mlflow/*"

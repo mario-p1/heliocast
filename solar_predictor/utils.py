@@ -1,6 +1,9 @@
+import os
 import time
 from collections.abc import Callable
 from datetime import UTC, datetime
+
+import mlflow
 
 LOCATIONS = {"SKOPJE": {"LAT": "42.00", "LONG": "21.43"}}
 
@@ -34,6 +37,11 @@ SEASONS = {
     11: "Autumn",
     12: "Winter",
 }
+
+
+def setup_mlflow(experiment: str = "Default") -> None:
+    mlflow.set_tracking_uri(os.environ["MLFLOW_TRACKING_ARN"])
+    mlflow.set_experiment(experiment)
 
 
 def timestamp_to_str(ts: int) -> str:

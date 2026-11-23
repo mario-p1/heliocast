@@ -109,6 +109,18 @@ Resources:
       DomainId: !Ref SageMakerDomain
       UserProfileName: !Sub ${AWS::StackName}-domain-user
 
+  MlflowApp:
+    Type: AWS::SageMaker::MlflowApp
+    Properties:
+      Name: !Sub ${AWS::StackName}-mlflow
+      ArtifactStoreUri: !Sub s3://${DataBucket}/mlflow
+      RoleArn: !GetAtt SageMakerExecutionRole.Arn
+      Tags:
+        - Key: sagemaker:domain-arn
+          Value: !GetAtt SageMakerDomain.DomainArn
+        - Key: sagemaker:user-profile-arn
+          Value: !GetAtt SageMakerUserProfile.UserProfileArn
+
 Outputs:
   DataBucketName:
     Description: DATA_BUCKET
@@ -128,3 +140,6 @@ Outputs:
   SageMakerDomainId:
     Description: SAGEMAKER_DOMAIN_ID
     Value: !Ref SageMakerDomain
+  MlflowAppArn:
+    Description: MLFLOW_TRACKING_ARN
+    Value: !GetAtt MlflowApp.Arn

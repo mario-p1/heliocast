@@ -32,8 +32,8 @@ def get_state_file_key(prefix: str):
     return f"{prefix}state.json"
 
 
-def get_model_prefix(latitude: str, longitude: str):
-    return f"models/lat={latitude},long={longitude}/"
+def get_run_prefix(latitude: str, longitude: str):
+    return f"runs/lat={latitude},long={longitude}/"
 
 
 def write_state(prefix: str, last_date: str):
