@@ -1,0 +1,42 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  ImageUri:
+    Type: String
+    Description: URI of the container image for the model
+
+  ExecutionRoleArn:
+    Type: String
+    Description: ARN of the SageMaker execution role
+
+  ModelDataUri:
+    Type: String
+    Description: S3 prefix of the model artifacts
+
+Resources:
+  PredictorModel:
+    Type: AWS::SageMaker::Model
+    Properties:
+      ExecutionRoleArn: !Ref ExecutionRoleArn
+      PrimaryContainer:
+        Image: !Ref ImageUri
+        Environment:
+          SERVED_MODEL_URI: /opt/ml/model
+        ModelDataSource:
+          S3DataSource:
+            S3Uri: !Ref ModelDataUri
+            S3DataType: S3Prefix
+            CompressionType: None
+  
+  EndpointConfig:
+    Type: AWS::SageMaker::EndpointConfig
+    Properties:
+      ProductionVariants:
+        - VariantName: AllTraffic
+          ModelName: !GetAtt PredictorModel.ModelName
+          ServerlessConfig:
+            MaxConcurrency: 1
+            MemorySizeInMB: 1024
+            ProvisionedConcurrency: 1
+
+  
