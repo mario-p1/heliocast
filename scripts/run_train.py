@@ -51,7 +51,7 @@ def main(
             "InstanceType": "ml.t3.large",
             "VolumeSizeInGB": 5,
         },
-        # EnableManagedSpotTraining=True,
+        EnableManagedSpotTraining=True,
         StoppingCondition={"MaxRuntimeInSeconds": 1800, "MaxWaitTimeInSeconds": 3600},
     )
     print(f"Started {job_name}")
