@@ -74,7 +74,12 @@ deploy_cloudformation:
 .PHONY: push_image
 push_image:
 	aws ecr get-login-password | docker login --username AWS --password-stdin $(ECR_REGISTRY)
-	docker build --platform linux/amd64 -t $(IMAGE_REPO_URI):latest .
+	docker buildx build \
+		--platform linux/amd64 \
+		--provenance=false \
+		--output type=image,oci-mediatypes=false \
+		-t $(IMAGE_REPO_URI):latest \
+		.
 	docker push $(IMAGE_REPO_URI):latest
 
 .PHONY: download_data
