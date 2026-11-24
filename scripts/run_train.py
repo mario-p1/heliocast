@@ -1,10 +1,10 @@
-import os
 import time
 
 import boto3
 import typer
 
 from solar_predictor import storage
+from solar_predictor.utils import config
 
 
 def main(
@@ -19,9 +19,9 @@ def main(
     sagemaker = boto3.client("sagemaker")
     sagemaker.create_training_job(
         TrainingJobName=job_name,
-        RoleArn=os.environ["SAGEMAKER_ROLE_ARN"],
+        RoleArn=config.SAGEMAKER_ROLE_ARN,
         AlgorithmSpecification={
-            "TrainingImage": f"{os.environ['IMAGE_REPO_URI']}:latest",
+            "TrainingImage": f"{config.IMAGE_REPO_URI}:latest",
             "TrainingInputMode": "File",
             "ContainerEntrypoint": [
                 "python",
@@ -35,17 +35,20 @@ def main(
                 "DataSource": {
                     "S3DataSource": {
                         "S3DataType": "S3Prefix",
-                        "S3Uri": f"s3://{storage.data_bucket}/{features_prefix}",
+                        "S3Uri": f"s3://{config.DATA_BUCKET}/{features_prefix}",
                         "S3DataDistributionType": "FullyReplicated",
                     }
                 },
             }
         ],
         OutputDataConfig={
-            "S3OutputPath": f"s3://{storage.data_bucket}/{run_prefix}",
+            "S3OutputPath": f"s3://{config.DATA_BUCKET}/{run_prefix}",
             "CompressionType": "NONE",
         },
-        Environment={"DATA_BUCKET": storage.data_bucket},
+        Environment={
+            "DATA_BUCKET": config.DATA_BUCKET,
+            "MLFLOW_TRACKING_URI": config.MLFLOW_TRACKING_URI,
+        },
         ResourceConfig={
             "InstanceCount": 1,
             "InstanceType": "ml.t3.large",

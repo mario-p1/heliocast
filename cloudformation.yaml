@@ -142,5 +142,5 @@ Outputs:
     Description: SAGEMAKER_DOMAIN_ID
     Value: !Ref SageMakerDomain
   MlflowAppArn:
-    Description: MLFLOW_TRACKING_ARN
+    Description: MLFLOW_APP_ARN
     Value: !GetAtt MlflowApp.Arn

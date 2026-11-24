@@ -1,11 +1,11 @@
 import json
-import os
 
 import boto3
 import pandas as pd
 
+from solar_predictor.utils import config
+
 s3 = boto3.client("s3")
-data_bucket = os.environ["DATA_BUCKET"]
 
 
 def file_exists(bucket: str, key: str):
@@ -38,7 +38,7 @@ def get_run_prefix(latitude: str, longitude: str):
 
 def write_state(prefix: str, last_date: str):
     s3.put_object(
-        Bucket=data_bucket,
+        Bucket=config.DATA_BUCKET,
         Key=get_state_file_key(prefix),
         Body=json.dumps({"last_date": last_date}),
     )
@@ -46,8 +46,8 @@ def write_state(prefix: str, last_date: str):
 
 def read_state(prefix: str):
     state_file_key = get_state_file_key(prefix)
-    if file_exists(data_bucket, state_file_key):
-        state_obj = s3.get_object(Bucket=data_bucket, Key=state_file_key)
+    if file_exists(config.DATA_BUCKET, state_file_key):
+        state_obj = s3.get_object(Bucket=config.DATA_BUCKET, Key=state_file_key)
         state = json.loads(state_obj["Body"].read())
         print(f"Found state file, last date: {state['last_date']}")
         return state
@@ -56,14 +56,14 @@ def read_state(prefix: str):
 
 def write_csv(file_key: str, df: pd.DataFrame, index: bool = True):
     s3.put_object(
-        Bucket=data_bucket,
+        Bucket=config.DATA_BUCKET,
         Key=file_key,
         Body=df.to_csv(index=index),
     )
 
 
 def read_s3_csv(file_key: str):
-    obj = s3.get_object(Bucket=data_bucket, Key=file_key)
+    obj = s3.get_object(Bucket=config.DATA_BUCKET, Key=file_key)
     return pd.read_csv(obj["Body"])
 
 
@@ -71,7 +71,9 @@ def find_files_at_loc(at_location_prefix: str, filename_end: str) -> list[str]:
     paginator = s3.get_paginator("list_objects_v2")
     keys = [
         obj["Key"]
-        for page in paginator.paginate(Bucket=data_bucket, Prefix=at_location_prefix)
+        for page in paginator.paginate(
+            Bucket=config.DATA_BUCKET, Prefix=at_location_prefix
+        )
         for obj in page.get("Contents", [])
         if obj["Key"].endswith(filename_end)
     ]

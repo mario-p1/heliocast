@@ -1,10 +1,10 @@
-import os
 import time
 
 import boto3
 import typer
 
 from solar_predictor import storage
+from solar_predictor.utils import config
 
 
 def main(
@@ -18,12 +18,12 @@ def main(
     sagemaker = boto3.client("sagemaker")
     sagemaker.create_processing_job(
         ProcessingJobName=job_name,
-        RoleArn=os.environ["SAGEMAKER_ROLE_ARN"],
+        RoleArn=config.SAGEMAKER_ROLE_ARN,
         AppSpecification={
-            "ImageUri": f"{os.environ['IMAGE_REPO_URI']}:latest",
+            "ImageUri": f"{config.IMAGE_REPO_URI}:latest",
             "ContainerEntrypoint": ["python", "-m", "solar_predictor.preprocess"],
         },
-        Environment={"DATA_BUCKET": storage.data_bucket},
+        Environment={"DATA_BUCKET": config.DATA_BUCKET},
         ProcessingResources={
             "ClusterConfig": {
                 "InstanceCount": 1,
@@ -35,7 +35,7 @@ def main(
             {
                 "InputName": "raw",
                 "S3Input": {
-                    "S3Uri": f"s3://{storage.data_bucket}/{location_prefix}",
+                    "S3Uri": f"s3://{config.DATA_BUCKET}/{location_prefix}",
                     "LocalPath": "/opt/ml/processing/input",
                     "S3DataType": "S3Prefix",
                     "S3InputMode": "File",
@@ -47,7 +47,7 @@ def main(
                 {
                     "OutputName": "features",
                     "S3Output": {
-                        "S3Uri": f"s3://{storage.data_bucket}/{features_prefix}",
+                        "S3Uri": f"s3://{config.DATA_BUCKET}/{features_prefix}",
                         "LocalPath": "/opt/ml/processing/output",
                         "S3UploadMode": "EndOfJob",
                     },

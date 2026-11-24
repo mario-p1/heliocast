@@ -10,7 +10,6 @@ import xgboost as xgb
 
 from solar_predictor.data import split_train_valid_test_by_index
 from solar_predictor.metrics import calculate_metrics
-from solar_predictor.utils import setup_mlflow
 
 INPUT_DIR = Path("/opt/ml/input/data/features")
 OUTPUT_DIR = Path("/opt/ml/output/data")
@@ -29,7 +28,7 @@ def main(
 ):
     logger.info("Starting training of XGBoost regression model...")
 
-    setup_mlflow("SARAH3_Predictor")
+    mlflow.set_experiment("SARAH3-predictor")
 
     features_df = pd.read_csv(
         input_dir / "tree_features.csv", index_col="datetime", parse_dates=True

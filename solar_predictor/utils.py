@@ -3,8 +3,6 @@ import time
 from collections.abc import Callable
 from datetime import UTC, datetime
 
-import mlflow
-
 LOCATIONS = {"SKOPJE": {"LAT": "42.00", "LONG": "21.43"}}
 
 MONTHS = [
@@ -39,9 +37,26 @@ SEASONS = {
 }
 
 
-def setup_mlflow(experiment: str = "Default") -> None:
-    mlflow.set_tracking_uri(os.environ["MLFLOW_TRACKING_ARN"])
-    mlflow.set_experiment(experiment)
+class _Config:
+    @property
+    def DATA_BUCKET(self) -> str:
+        return os.environ["DATA_BUCKET"]
+
+    @property
+    def MLFLOW_TRACKING_URI(self) -> str:
+        return os.environ["MLFLOW_TRACKING_URI"]
+
+    @property
+    def IMAGE_REPO_URI(self) -> str:
+        return os.environ["IMAGE_REPO_URI"]
+
+    @property
+    def SAGEMAKER_ROLE_ARN(self) -> str:
+        return os.environ["SAGEMAKER_ROLE_ARN"]
+
+
+# Singleton config object
+config = _Config()
 
 
 def timestamp_to_str(ts: int) -> str:
