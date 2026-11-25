@@ -11,6 +11,7 @@ wheels/
 
 # Env files
 .env*
+!.env.template
 chart.html
 mlflow.db
 mlruns/
