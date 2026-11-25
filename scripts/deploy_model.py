@@ -41,7 +41,7 @@ def main(
         (
             "aws cloudformation deploy"
             " --template-file cloudformation-endpoint.yaml"
-            " --stack-name radiation-forecaster-endpoint"
+            f" --stack-name {config.ENDPOINT_STACK_NAME}"
             " --parameter-overrides "
             f" ImageUri={config.IMAGE_REPO_URI}@{image['imageDigest']}"
             f" ExecutionRoleArn={config.SAGEMAKER_ROLE_ARN}"

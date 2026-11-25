@@ -4,8 +4,6 @@ export
 SRC := $(shell find heliocast -name '*.py')
 .DELETE_ON_ERROR:
 
-STACK_NAME := radiation-forecaster
-
 .PHONY: all
 all: build/lambda.zip
 
@@ -57,13 +55,13 @@ deploy_lambda: upload_lambda
 describe_stacks:
 	@echo "=== MAIN STACK ==="
 	@aws cloudformation describe-stacks \
-		--stack-name $(STACK_NAME) \
+		--stack-name $(MAIN_STACK_NAME) \
 		--query 'Stacks[0].Outputs[].[Description,OutputValue]' \
 		--output text | tr '\t' '='	
 
 	@echo "=== ENDPOINT STACK ==="
 	@aws cloudformation describe-stacks \
-		--stack-name radiation-forecaster-endpoint \
+		--stack-name $(ENDPOINT_STACK_NAME) \
 		--query 'Stacks[0].Outputs[].[Description,OutputValue]' \
 		--output text | tr '\t' '='
 
@@ -71,7 +69,7 @@ describe_stacks:
 deploy_cloudformation:
 	aws cloudformation deploy \
 		--template-file cloudformation.yaml \
-		--stack-name $(STACK_NAME) \
+		--stack-name $(MAIN_STACK_NAME) \
 		--capabilities CAPABILITY_IAM \
 		--parameter-overrides \
 			CodeBucket=${CODE_BUCKET} \

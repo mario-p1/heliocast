@@ -55,6 +55,10 @@ class _Config:
     def SAGEMAKER_ROLE_ARN(self) -> str:
         return os.environ["SAGEMAKER_ROLE_ARN"]
 
+    @property
+    def ENDPOINT_STACK_NAME(self) -> str:
+        return os.environ["ENDPOINT_STACK_NAME"]
+
 
 # Singleton config object
 config = _Config()
