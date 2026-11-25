@@ -5,7 +5,7 @@ import boto3
 import mlflow
 import typer
 
-from solar_predictor.utils import config, setup_logging
+from heliocast.utils import config, setup_logging
 
 logger = logging.getLogger(__name__)
 

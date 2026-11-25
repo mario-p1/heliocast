@@ -3,7 +3,7 @@ import json
 import boto3
 import pandas as pd
 
-from solar_predictor.utils import config
+from heliocast.utils import config
 
 s3 = boto3.client("s3")
 

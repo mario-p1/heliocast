@@ -4,8 +4,8 @@ from typing import Annotated
 import pandas as pd
 import typer
 
-from solar_predictor.data import drop_incomplete_tail, read_sarah3
-from solar_predictor.features import build_tree_features
+from heliocast.data import drop_incomplete_tail, read_sarah3
+from heliocast.features import build_tree_features
 
 INPUT_DIR = Path("/opt/ml/processing/input")
 OUTPUT_DIR = Path("/opt/ml/processing/output")

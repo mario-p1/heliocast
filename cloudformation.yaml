@@ -58,7 +58,7 @@ Resources:
         S3Bucket: !Ref CodeBucket
         S3Key: fetch_data_function.zip
       Role: !GetAtt DataPipelineFunctionRole.Arn
-      Handler: solar_predictor.handlers.fetch_data.lambda_handler
+      Handler: heliocast.handlers.fetch_data.lambda_handler
       Runtime: python3.14
       Timeout: 60
       MemorySize: 512

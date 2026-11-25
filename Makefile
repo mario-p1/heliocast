@@ -1,7 +1,7 @@
 -include .env
 export
 
-SRC := $(shell find solar_predictor -name '*.py')
+SRC := $(shell find heliocast -name '*.py')
 .DELETE_ON_ERROR:
 
 STACK_NAME := radiation-forecaster
@@ -29,7 +29,7 @@ build/lambda_base.zip: uv.lock
 
 build/lambda.zip: build/lambda_base.zip $(SRC)
 	cp build/lambda_base.zip build/lambda.zip
-	zip -qr build/lambda.zip solar_predictor -x '*__pycache__*'
+	zip -qr build/lambda.zip heliocast -x '*__pycache__*'
 
 .PHONY: clean
 clean:

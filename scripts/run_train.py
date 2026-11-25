@@ -3,8 +3,8 @@ import time
 import boto3
 import typer
 
-from solar_predictor import storage
-from solar_predictor.utils import config
+from heliocast import storage
+from heliocast.utils import config
 
 
 def main(
@@ -26,7 +26,7 @@ def main(
             "ContainerEntrypoint": [
                 "python",
                 "-m",
-                "solar_predictor.models.regressor_tree",
+                "heliocast.models.regressor_tree",
             ],
         },
         InputDataConfig=[

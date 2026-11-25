@@ -1,6 +1,6 @@
 import typer
 
-from solar_predictor.handlers.fetch_data import lambda_handler
+from heliocast.handlers.fetch_data import lambda_handler
 
 
 def main(

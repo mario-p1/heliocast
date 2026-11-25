@@ -1,6 +1,6 @@
 import pandas as pd
 
-from solar_predictor.storage import find_files_at_loc, read_s3_csv
+from heliocast.storage import find_files_at_loc, read_s3_csv
 
 
 def read_sarah3(

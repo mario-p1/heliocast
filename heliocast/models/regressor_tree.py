@@ -8,8 +8,8 @@ import pandas as pd
 import typer
 import xgboost as xgb
 
-from solar_predictor.data import split_train_valid_test_by_index
-from solar_predictor.metrics import calculate_metrics
+from heliocast.data import split_train_valid_test_by_index
+from heliocast.metrics import calculate_metrics
 
 INPUT_DIR = Path("/opt/ml/input/data/features")
 OUTPUT_DIR = Path("/opt/ml/output/data")

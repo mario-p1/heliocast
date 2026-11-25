@@ -1046,6 +1046,60 @@ wheels = [
 ]
 
 [[package]]
+name = "heliocast"
+version = "0.1.0"
+source = { virtual = "." }
+default-groups = ["dev", "ml"]
+dependencies = [
+    { name = "boto3" },
+    { name = "botocore", extra = ["crt"] },
+    { name = "pandas" },
+    { name = "requests" },
+    { name = "sagemaker-mlflow" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "notebook" },
+    { name = "pytest" },
+    { name = "ruff" },
+]
+ml = [
+    { name = "mlflow" },
+    { name = "plotly" },
+    { name = "scikit-learn" },
+    { name = "statsmodels" },
+    { name = "tqdm" },
+    { name = "typer" },
+    { name = "xgboost" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "boto3", specifier = ">=1.44.9" },
+    { name = "botocore", extras = ["crt"], specifier = ">=1.44.9" },
+    { name = "pandas", specifier = ">=3.1.1" },
+    { name = "requests", specifier = ">=2.34.2" },
+    { name = "sagemaker-mlflow", specifier = ">=0.5.0" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "notebook", specifier = ">=7.6.3" },
+    { name = "pytest", specifier = ">=9.2.0" },
+    { name = "ruff", specifier = ">=0.17.3" },
+]
+ml = [
+    { name = "mlflow", specifier = ">=3.17.2" },
+    { name = "plotly", specifier = ">=7.1.0" },
+    { name = "scikit-learn", specifier = ">=1.9.1" },
+    { name = "statsmodels", specifier = ">=0.15.0" },
+    { name = "tqdm", specifier = ">=4.70.1" },
+    { name = "typer", specifier = ">=0.27.3" },
+    { name = "xgboost", specifier = ">=3.4.1" },
+]
+
+[[package]]
 name = "httpcore"
 version = "1.0.9"
 source = { registry = "https://pypi.org/simple" }
@@ -3097,60 +3151,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/1f/ea/49c993d6dfdd7338c9b1000a0f36817ed7ec84577ae2e52f890d1a4ff909/smmap-5.0.3.tar.gz", hash = "sha256:4d9debb8b99007ae47165abc08670bd74cb74b5227dda7f643eccc4e9eb5642c", size = 22506, upload-time = "2026-03-09T03:43:26.1Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c1/d4/59e74daffcb57a07668852eeeb6035af9f32cbfd7a1d2511f17d2fe6a738/smmap-5.0.3-py3-none-any.whl", hash = "sha256:c106e05d5a61449cf6ba9a1e650227ecfb141590d2a98412103ff35d89fc7b2f", size = 24390, upload-time = "2026-03-09T03:43:24.361Z" },
-]
-
-[[package]]
-name = "solar-predictor"
-version = "0.1.0"
-source = { virtual = "." }
-default-groups = ["dev", "ml"]
-dependencies = [
-    { name = "boto3" },
-    { name = "botocore", extra = ["crt"] },
-    { name = "pandas" },
-    { name = "requests" },
-    { name = "sagemaker-mlflow" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "notebook" },
-    { name = "pytest" },
-    { name = "ruff" },
-]
-ml = [
-    { name = "mlflow" },
-    { name = "plotly" },
-    { name = "scikit-learn" },
-    { name = "statsmodels" },
-    { name = "tqdm" },
-    { name = "typer" },
-    { name = "xgboost" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "boto3", specifier = ">=1.44.9" },
-    { name = "botocore", extras = ["crt"], specifier = ">=1.44.9" },
-    { name = "pandas", specifier = ">=3.1.1" },
-    { name = "requests", specifier = ">=2.34.2" },
-    { name = "sagemaker-mlflow", specifier = ">=0.5.0" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "notebook", specifier = ">=7.6.3" },
-    { name = "pytest", specifier = ">=9.2.0" },
-    { name = "ruff", specifier = ">=0.17.3" },
-]
-ml = [
-    { name = "mlflow", specifier = ">=3.17.2" },
-    { name = "plotly", specifier = ">=7.1.0" },
-    { name = "scikit-learn", specifier = ">=1.9.1" },
-    { name = "statsmodels", specifier = ">=0.15.0" },
-    { name = "tqdm", specifier = ">=4.70.1" },
-    { name = "typer", specifier = ">=0.27.3" },
-    { name = "xgboost", specifier = ">=3.4.1" },
 ]
 
 [[package]]

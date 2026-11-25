@@ -1,6 +1,6 @@
 *
 !pyproject.toml
 !uv.lock
-!solar_predictor
+!heliocast
 !serve.sh
 **/__pycache__

@@ -3,8 +3,8 @@ import time
 import boto3
 import typer
 
-from solar_predictor import storage
-from solar_predictor.utils import config
+from heliocast import storage
+from heliocast.utils import config
 
 
 def main(
@@ -21,7 +21,7 @@ def main(
         RoleArn=config.SAGEMAKER_ROLE_ARN,
         AppSpecification={
             "ImageUri": f"{config.IMAGE_REPO_URI}:latest",
-            "ContainerEntrypoint": ["python", "-m", "solar_predictor.preprocess"],
+            "ContainerEntrypoint": ["python", "-m", "heliocast.preprocess"],
         },
         Environment={"DATA_BUCKET": config.DATA_BUCKET},
         ProcessingResources={

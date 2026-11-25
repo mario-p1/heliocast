@@ -18,4 +18,4 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-default-groups --group ml --no-install-project
 
 COPY --chmod=755 serve.sh /usr/local/bin/serve
-COPY solar_predictor solar_predictor
+COPY heliocast heliocast

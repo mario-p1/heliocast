@@ -2,8 +2,8 @@ from typing import Any
 
 import pandas as pd
 
-from solar_predictor import openmeteo, storage
-from solar_predictor.utils import get_current_utc_date
+from heliocast import openmeteo, storage
+from heliocast.utils import get_current_utc_date
 
 DEFAULT_START_DATE = "1990-01-01"
 

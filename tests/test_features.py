@@ -1,6 +1,6 @@
 import pandas as pd
 
-from solar_predictor.features import resample_to_hourly
+from heliocast.features import resample_to_hourly
 
 
 def test_resample_to_hourly():
