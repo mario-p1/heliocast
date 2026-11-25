@@ -1,7 +1,7 @@
 # Solar Radiation Predictor
 
-Solar Radiation Predictor is an end-to-end ML project on AWS that predicts hourly shortwave solar radiation for a given location from EUMETSAT SARAH-3 satellite data.
-It covers data ingestion, feature building, XGBoost training on spot instances, MLflow experiment tracking and model registry, and serverless deployment on SageMaker.
+Time series analysis and forecasting of solar radiation, based on satellite data.
+Models are trained on SageMaker, tracked in MLflow and deployed to a serverless endpoint.
 
 ## AWS architecture
 - **CloudFormation**: main stack and a separate endpoint stack
