@@ -1,3 +1,4 @@
+import logging
 import os
 import time
 from collections.abc import Callable
@@ -57,6 +58,10 @@ class _Config:
 
 # Singleton config object
 config = _Config()
+
+
+def setup_logging() -> None:
+    logging.basicConfig(level=logging.INFO)
 
 
 def timestamp_to_str(ts: int) -> str:

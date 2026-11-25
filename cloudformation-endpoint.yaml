@@ -9,34 +9,42 @@ Parameters:
     Type: String
     Description: ARN of the SageMaker execution role
 
-  ModelDataUri:
+  MlflowTrackingUri:
     Type: String
-    Description: S3 prefix of the model artifacts
+    Description: URI of the mlflow app
+
+  ModelUri:
+    Type: String
+    Description: URI of the mlflow model (e.g. models:/SARAH3-predictor/3)
 
 Resources:
-  PredictorModel:
+  Sarah3PredictorModel:
     Type: AWS::SageMaker::Model
     Properties:
       ExecutionRoleArn: !Ref ExecutionRoleArn
       PrimaryContainer:
         Image: !Ref ImageUri
         Environment:
-          SERVED_MODEL_URI: /opt/ml/model
-        ModelDataSource:
-          S3DataSource:
-            S3Uri: !Ref ModelDataUri
-            S3DataType: S3Prefix
-            CompressionType: None
+          MLFLOW_TRACKING_URI: !Ref MlflowTrackingUri
+          SERVED_MODEL_URI: !Ref ModelUri
   
-  EndpointConfig:
+  Sarah3PredictorEndpointConfig:
     Type: AWS::SageMaker::EndpointConfig
     Properties:
       ProductionVariants:
         - VariantName: AllTraffic
-          ModelName: !GetAtt PredictorModel.ModelName
+          ModelName: !GetAtt Sarah3PredictorModel.ModelName
           ServerlessConfig:
             MaxConcurrency: 1
             MemorySizeInMB: 1024
             ProvisionedConcurrency: 1
 
-  
+  Sarah3PredictorEndpoint:
+    Type: AWS::SageMaker::Endpoint
+    Properties:
+      EndpointConfigName: !GetAtt Sarah3PredictorEndpointConfig.EndpointConfigName
+
+Outputs:
+  Sarah3PredictorEndpointUrl:
+    Description: SARAH3_PREDICTOR_ENDPOINT_NAME
+    Value: !GetAtt Sarah3PredictorEndpoint.EndpointName

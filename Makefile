@@ -53,10 +53,17 @@ deploy_lambda: upload_lambda
 		--s3-bucket $(CODE_BUCKET) \
 		--s3-key fetch_data_function.zip
 
-.PHONY: get_stack_info
-get_stack_info:
-	aws cloudformation describe-stacks \
+.PHONY: describe_stacks
+describe_stacks:
+	@echo "=== MAIN STACK ==="
+	@aws cloudformation describe-stacks \
 		--stack-name $(STACK_NAME) \
+		--query 'Stacks[0].Outputs[].[Description,OutputValue]' \
+		--output text | tr '\t' '='	
+
+	@echo "=== ENDPOINT STACK ==="
+	@aws cloudformation describe-stacks \
+		--stack-name radiation-forecaster-endpoint \
 		--query 'Stacks[0].Outputs[].[Description,OutputValue]' \
 		--output text | tr '\t' '='
 
